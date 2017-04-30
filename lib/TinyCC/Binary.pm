@@ -2,7 +2,7 @@ use NativeCall;
 
 my class TCCBinary is export {
     has $.state;
-    has $.blob;
+    has $.bytes;
 
     proto method lookup($, $?) {*}
     multi method lookup($name) { $!state.get_symbol($name) }

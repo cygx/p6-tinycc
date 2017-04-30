@@ -86,10 +86,10 @@ my class TCC is export {
         my int $size = $state.relocate(Pointer);
         self!CHECK-ERROR;
 
-        my $blob := buf8.allocate($size);
-        $state.relocate(nativecast(Pointer, $blob));
+        my $bytes := buf8.allocate($size);
+        $state.relocate(nativecast(Pointer, $bytes));
         self!CHECK-ERROR;
 
-        TCCBinary.new(:$state, :$blob);
+        TCCBinary.new(:$state, :$bytes);
     }
 }
