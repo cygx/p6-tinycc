@@ -17,7 +17,7 @@ my class TCC is export {
     method !CHECK-ERROR is hidden-from-backtrace {
         if defined $!error {
             LEAVE $!error = Nil;
-            X::TinyCC.new(message => $!error).throw;
+            X::TCC.new(message => $!error).throw;
         }
     }
 
