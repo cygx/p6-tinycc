@@ -23,6 +23,8 @@ my class TCC is export {
 
     method !COMPILE($type) is hidden-from-backtrace {
         my $state := TCCState.new;
+        UNDO $state.delete;
+
         $state.set_error_func(Pointer, -> $, $!error {});
 
         proto option(|) { {*}; self!CHECK-ERROR }
@@ -66,15 +68,18 @@ my class TCC is export {
 
     method run(*@args) {
         my $state := self!COMPILE(MEM);
+        LEAVE $state.delete;
+
         my int $rv = $state.run(+@args, CArray[Str].new(@args>>.Str));
         self!CHECK-ERROR;
 
-        $state.delete;
         $rv;
     }
 
     multi method relocate(:$auto!) {
         my $state = self!COMPILE(MEM);
+        UNDO $state.delete;
+
         $state.relocate(RELOCATE_AUTO);
         self!CHECK-ERROR;
 
@@ -83,6 +88,8 @@ my class TCC is export {
 
     multi method relocate {
         my $state = self!COMPILE(MEM);
+        UNDO $state.delete;
+
         my int $size = $state.relocate(Pointer);
         self!CHECK-ERROR;
 
