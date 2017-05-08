@@ -38,7 +38,7 @@ my class TCC is export {
         multi option(:$nostdlib!) { $state.set_options('-nostdlib') }
 
         option |$_ for @!options;
-        $state.set_output_type(MEM);
+        $state.set_output_type($type);
         self!CHECK-ERROR;
 
         for @!undefs {
