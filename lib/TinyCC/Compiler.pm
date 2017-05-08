@@ -12,6 +12,8 @@ class X::TCC is Exception {
 my class TCC is export {
     has @!options;
     has @!code;
+    has @!defines;
+    has @!undefs;
     has $!error;
 
     method !CHECK-ERROR is hidden-from-backtrace {
@@ -39,6 +41,16 @@ my class TCC is export {
         $state.set_output_type(MEM);
         self!CHECK-ERROR;
 
+        for @!undefs {
+            $state.undefine_symbol($_);
+            self!CHECK-ERROR;
+        }
+
+        for @!defines {
+            $state.define_symbol(.key, .value);
+            self!CHECK-ERROR;
+        }
+
         for @!code {
             $state.compile_string($_);
             self!CHECK-ERROR;
@@ -50,6 +62,8 @@ my class TCC is export {
     method reset {
         @!options = Empty;
         @!code = Empty;
+        @!defines = Empty;
+        @!undefs = Empty;
         $!error = Nil;
         self;
     }
@@ -58,6 +72,22 @@ my class TCC is export {
         PRE %_ == 1;
         my $key = %_.keys[0];
         @!options.push($key => $_) for @_;
+        self;
+    }
+
+    method define(*%_) {
+        @!defines.append(%_.pairs.map: {
+            .key => do given .value {
+                when Bool { Str }
+                default { .Str }
+            }
+        });
+
+        self;
+    }
+
+    method undef(*%_) {
+        @!undefs.append(%_.keys);
         self;
     }
 
