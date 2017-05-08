@@ -14,6 +14,7 @@ my class TCC is export {
     has @!code;
     has @!defines;
     has @!undefs;
+    has @!symbols;
     has $!error;
 
     method !CHECK-ERROR is hidden-from-backtrace {
@@ -51,6 +52,11 @@ my class TCC is export {
             self!CHECK-ERROR;
         }
 
+        for @!symbols {
+            $state.add_symbol(.key, nativecast(Pointer, .value));
+            self!CHECK-ERROR;
+        }
+
         for @!code {
             $state.compile_string($_);
             self!CHECK-ERROR;
@@ -64,6 +70,7 @@ my class TCC is export {
         @!code = Empty;
         @!defines = Empty;
         @!undefs = Empty;
+        @!symbols = Empty;
         $!error = Nil;
         self;
     }
@@ -88,6 +95,11 @@ my class TCC is export {
 
     method undef(*%_) {
         @!undefs.append(%_.keys);
+        self;
+    }
+
+    method declare(*%_) {
+        @!symbols.append(%_.pairs);
         self;
     }
 
