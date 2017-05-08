@@ -1,8 +1,10 @@
+use NativeCall;
 use TinyCC::Compiler;
 use TinyCC::Typeof;
 
-my role CSub[$bytes] is export {
+my role CSub[$bytes, $fp] is export {
     method bytes { $bytes }
+    method funcptr { $fp }
 }
 
 sub C($body, &sub, $sig = &sub.signature) is export {
@@ -16,5 +18,6 @@ sub C($body, &sub, $sig = &sub.signature) is export {
     my $bin := TCC.new.compile($code).relocate;
     LEAVE .close with $bin;
 
-    CALLER::MY::{"\&$name"} := $bin.lookup($name, $sig) does CSub[$bin.bytes];
+    my $fp := $bin.lookup($name);
+    CALLER::MY::{"\&$name"} := nativecast($sig, $fp) does CSub[$bin.bytes, $fp];
 }
