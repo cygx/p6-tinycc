@@ -62,6 +62,8 @@ my class TCC is export {
             self!CHECK-ERROR;
         }
 
+        @!code = Empty;
+
         $state;
     }
 
