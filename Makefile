@@ -9,6 +9,7 @@ update: build
 	make -C build/win32
 	mkdir -p resources/win64
 	cp -r $(FILES) resources/win64
+	perl6 meta.p6 > META6.json
 
 build:
 	git clone -b mob --single-branch --depth 1 $(REPO) build
