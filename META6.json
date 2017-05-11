@@ -1,6 +1,6 @@
 {
     "name"          : "TinyCC",
-    "version"       : "0.2",
+    "version"       : "0.2.1",
     "perl"          : "6.c",
     "author"        : "github:cygx",
     "license"       : "BSL-1.0",
