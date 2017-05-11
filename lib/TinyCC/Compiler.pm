@@ -37,6 +37,7 @@ my class TCC is export {
         multi option(:l($_)!) { $state.add_library($_) }
         multi option(:$nostdinc!) { $state.set_options('-nostdinc') }
         multi option(:$nostdlib!) { $state.set_options('-nostdlib') }
+        multi option(:prefix($_)!) { $state.set_lib_path($_); }
 
         option |$_ for @!options;
         $state.set_output_type($type);
