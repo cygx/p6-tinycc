@@ -15,6 +15,7 @@ my class TCC is export {
     has @!defines;
     has @!undefs;
     has @!symbols;
+    has @!files;
     has $!error;
 
     method !CHECK-ERROR is hidden-from-backtrace {
@@ -58,11 +59,17 @@ my class TCC is export {
             self!CHECK-ERROR;
         }
 
+        for @!files {
+            $state.add_file($_);
+            self!CHECK-ERROR;
+        }
+
         for @!code {
             $state.compile_string($_);
             self!CHECK-ERROR;
         }
 
+        @!files = Empty;
         @!code = Empty;
 
         $state;
@@ -74,6 +81,7 @@ my class TCC is export {
         @!defines = Empty;
         @!undefs = Empty;
         @!symbols = Empty;
+        @!files = Empty;
         $!error = Nil;
         self;
     }
@@ -111,6 +119,11 @@ my class TCC is export {
         self;
     }
 
+    method add(*@_) {
+        @!files.append(@_);
+        self;
+    }
+
     method run(*@args) {
         my $state := self!COMPILE(MEM);
         LEAVE .delete with $state;
@@ -144,4 +157,16 @@ my class TCC is export {
 
         TCCBinary.new(:$state, :$bytes);
     }
+
+    proto method dump($_) {
+        my $state = self!COMPILE({*});
+        UNDO .delete with $state;
+
+        $state.output_file($_);
+        self!CHECK-ERROR;
+    }
+
+    multi method dump($file, :$exe!) { EXE }
+    multi method dump($file, :$dll!) { DLL }
+    multi method dump($file, :$obj!) { OBJ }
 }

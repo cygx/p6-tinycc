@@ -7,13 +7,14 @@ my role CSub[$bytes, $fp] is export {
     method funcptr { $fp }
 }
 
-sub C($body, &sub, $sig = &sub.signature) is export {
+sub C($body, &sub, $sig = &sub.signature, :$include) is export {
     PRE $sig.arity == $sig.params;
 
+    my $prelude = $include ?? $include.map({ "#include \"$_\"\n" }).join !! '';
     my $name = &sub.name;
     my $rtype = typeof $sig.returns;
     my @params = $sig.params.map({ "{typeof .type} {.name}" });
-    my $code = "$rtype $name\({@params.join(', ')}) \{$body}";
+    my $code = "$prelude$rtype $name\({@params.join(', ')}) \{$body}";
 
     my $bin := TCC.new.compile($code).relocate;
     LEAVE .close with $bin;
