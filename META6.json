@@ -20,6 +20,7 @@
         "TinyCC::Eval"      : "lib/TinyCC/Eval.pm",
         "TinyCC::State"     : "lib/TinyCC/State.pm",
         "TinyCC::Typeof"    : "lib/TinyCC/Typeof.pm"
+        "TinyCC::Win64"     : "lib/TinyCC/Win64.pm"
     },
     "resources"     : [ ]
 }
