@@ -3,7 +3,13 @@ Perl 6 bindings for the Tiny C Compiler
 Copyright 2017 cygx <cygx@cpan.org>
 Distributed under the Boost Software License, Version 1.0
 
-If libtcc cannot be found, manually set the LIBTCC environment variable.
+If libtcc cannot be found automatically, manually set the LIBTCC environment
+variable. It's recommended to do so just once at module installation time, eg
+
+    LIBTCC=/usr/lib/libtcc.so zef install TinyCC
+
+Note that TinyCC only generates a shared library if you pass --disable-static
+to its configure script.
 
 Windows users that trust a binary TinyCC version compiled from the
 public 'mob' development branch[1][2] may use
