@@ -5,7 +5,9 @@ language: perl6
 perl6:
   - latest
 install:
-  - git clone git://repo.or.cz/tinycc.git && cd tinycc && ./configure --disable-static && make
+  - git clone git://repo.or.cz/tinycc.git
+  - cd tinycc && ./configure --disable-static && cd ..
+  - make -C tinycc libtcc.so
   - rakudobrew build-zef
 script:
   - LIBTCC=tinycc/libtcc.so zef install .
