@@ -3,7 +3,7 @@
 
 use NativeCall;
 
-sub LIB { once %*ENV<LIBTCC> // BEGIN %*ENV<LIBTCC> // 'tcc' }
+sub LIB { once %*ENV<LIBTCC> // BEGIN %*ENV<LIBTCC> // 'libtcc' }
 
 my class TCCState is repr<CPointer> is export {
     sub new(--> TCCState)
