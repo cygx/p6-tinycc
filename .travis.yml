@@ -9,4 +9,4 @@ install:
   - pushd tinycc && ./configure --prefix=/usr --disable-static && make && sudo make install && popd
   - rakudobrew build-zef
 script:
-  - zef install .
+  - LIBTCC=/usr/lib/libtcc.so zef install .
